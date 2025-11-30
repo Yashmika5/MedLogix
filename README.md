@@ -10,7 +10,7 @@ cd "d:\NIBM\HNDSE-2ND-Sem\PDSA\InsightBot"
 .\medicine_reminder_server.exe
 ```
 - **Open UI**: Visit `http://localhost:5000` in your browser.
- # MedLogix — Medicine Reminder System
+ # MedLogix - Medicine Reminder System
 
 Lightweight C++ HTTP server with a simple web UI to manage medicines, categories, reminders and stock. The server is implemented as a single self-contained executable (prebuilt `medicine_reminder_server.exe`) and the full source is in the `src/` folder.
 
@@ -175,9 +175,6 @@ Thumbs.db
 
 --
 
-Thank you for using MedLogix. If you'd like, I can:
-- Add the `.gitignore` to the repo and push it (I can do this for you now). 
-- Rewrite history to remove the prebuilt executable from all commits.
-- Add a short changelog or a Dockerfile to make running easier.
+
 
 
