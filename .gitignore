@@ -1,0 +1,12 @@
+﻿# Editor / environment
+.vscode/
+.local/
+.ccls-cache/
+
+# Build artifacts / executables
+*.exe
+medicine_reminder_server
+
+# OS files
+Thumbs.db
+.DS_Store
