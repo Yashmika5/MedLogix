@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedLogix - Medicine Reminder System</title>
+    <meta name="description" content="Modern medicine reminder system with stock tracking, scheduling, and comprehensive medicine management.">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon">💊</div>
+                <div class="brand-text">
+                    <h1>MedLogix</h1>
+                    <p>Medicine Manager</p>
+                </div>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <button class="nav-btn active" data-section="categories" data-testid="nav-categories">📂 Categories</button>
+                <button class="nav-btn" data-section="medicines" data-testid="nav-medicines">💊 Medicines</button>
+                <button class="nav-btn" data-section="stock" data-testid="nav-stock">📦 Stock</button>
+                <button class="nav-btn" data-section="reminders" data-testid="nav-reminders">⏰ Reminders</button>
+                <button class="nav-btn" data-section="queue" data-testid="nav-queue">📋 Upcoming</button>
+                <button class="nav-btn" data-section="undo" data-testid="nav-undo">↩️ History</button>
+                <button class="nav-btn" data-section="help" data-testid="nav-help">❓ Help</button>
+            </div>
+
+            <div class="nav-actions">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" data-testid="button-mobile-menu">
+                    <span class="menu-icon">☰</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Status Panel -->
+        <div class="status-panel" id="statusPanel">
+            <div class="status-header">
+                <span class="status-icon">📊</span>
+                <h3>System Status</h3>
+            </div>
+            <div class="status-grid">
+                <div class="status-item">
+                    <span class="status-label">Categories</span>
+                    <span class="status-value" id="categoryCount">0</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Medicines</span>
+                    <span class="status-value" id="medicineCount">0</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Reminders</span>
+                    <span class="status-value" id="reminderCount">0</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Low Stock</span>
+                    <span class="status-value warning" id="lowStockCount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div id="categories" class="section active">
+            <div class="section-header">
+                <h2>📂 Category Manager</h2>
+                <p class="section-desc">Organize and manage your medicine types efficiently for quick access and streamlined reminders.</p>
+            </div>
+
+            <div class="card">
+                <div class="form-group">
+                    <input type="text" id="categoryName" placeholder="Enter category name" data-testid="input-category-name" class="input-field" />
+                    <button onclick="addCategory()" data-testid="button-add-category" class="btn btn-primary">➕ Add</button>
+                    <button onclick="removeCategory()" data-testid="button-remove-category" class="btn btn-danger">🗑️ Remove</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Categories</h3>
+                <div id="categoryList" class="list-container"></div>
+            </div>
+        </div>
+
+        <!-- Medicines Section -->
+        <div id="medicines" class="section">
+            <div class="section-header">
+                <h2>💊 Medicine Manager</h2>
+                <p class="section-desc">Effortlessly manage your medicines, dosages, and schedules for timely and accurate reminders.</p>
+            </div>
+
+            <div class="card">
+                <h3>Add Medicine</h3>
+                <div class="form-grid">
+                    <input type="text" id="medicineName" placeholder="Medicine name" data-testid="input-medicine-name" class="input-field" />
+                    <input type="text" id="medicineDose" placeholder="Dose (e.g., 500mg)" data-testid="input-medicine-dose" class="input-field" />
+                    <input type="text" id="medicineTimings" placeholder="Timings (e.g., Morning, Evening)" data-testid="input-medicine-timings" class="input-field" />
+                    <select id="medicineCategory" data-testid="select-medicine-category" class="input-field">
+                        <option value="">Select category</option>
+                    </select>
+                </div>
+                <button onclick="addMedicine()" data-testid="button-add-medicine" class="btn btn-primary">➕ Add Medicine</button>
+            </div>
+
+            <div class="card">
+                <h3>Search & Filter</h3>
+                <div class="form-group">
+                    <input type="text" id="searchName" placeholder="Search medicine name" data-testid="input-search-medicine" class="input-field" />
+                    <button onclick="searchMedicine()" class="btn btn-secondary"style="border: 1px solid purple;">🔍 Search</button>
+                    <button onclick="resetSearch()" class="btn btn-secondary" style="border: 1px solid red;">❌ Reset</button>
+
+                    <select id="filterCategory" data-testid="select-filter-category" class="input-field">
+                        <option value="">All Categories</option>
+                    </select>
+                    <button onclick="filterMedicines()" data-testid="button-filter" class="btn btn-secondary"style="border: 1px solid purple;">🔍 Filter</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Medicine List</h3>
+                <div id="medicineList" class="list-container"></div>
+            </div>
+        </div>
+
+        <!-- Stock Section -->
+        <div id="stock" class="section">
+            <div class="section-header">
+                <h2>📦 Stock Tracking</h2>
+                <p class="section-desc">Monitor medicine quantities in real-time and get alerts to never run out of essential medications.</p>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>📈 Update Stock</h3>
+                    <div class="form-group-vertical">
+                        <select id="updateStockMedicine" data-testid="select-update-stock-medicine" class="input-field">
+                            <option value="">Select Medicine</option>
+                        </select>
+                        <input type="number" id="updateStockQuantity" placeholder="New quantity" min="0" data-testid="input-update-quantity" class="input-field" />
+                        <button onclick="updateStock()" data-testid="button-update-stock" class="btn btn-primary">Update Stock</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📉 Decrease Stock</h3>
+                    <div class="form-group-vertical">
+                        <select id="decreaseStockMedicine" data-testid="select-decrease-stock-medicine" class="input-field">
+                            <option value="">Select Medicine</option>
+                        </select>
+                        <input type="number" id="decreaseStockAmount" placeholder="Decrease by" min="1" value="1" data-testid="input-decrease-amount" class="input-field" />
+                        <button onclick="decreaseStock()" data-testid="button-decrease-stock" class="btn btn-secondary">Decrease Stock</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Stock Levels</h3>
+                <div id="stockList" class="list-container"></div>
+            </div>
+        </div>
+
+        <!-- Reminders Section -->
+        <div id="reminders" class="section">
+            <div class="section-header">
+                <h2>⏰ Reminder Scheduler</h2>
+                <p class="section-desc">Schedule and organize medicine reminders efficiently to ensure timely intake and health management.</p>
+            </div>
+
+            <div class="card">
+                <h3>🔔 Schedule Reminder</h3>
+                <div class="form-group-vertical">
+                    <select id="reminderMedicine" data-testid="select-reminder-medicine" class="input-field">
+                        <option value="">Select Medicine</option>
+                    </select>
+                    <input type="time" id="reminderTime" data-testid="input-reminder-time" class="input-field" />
+                    <button onclick="scheduleReminder()" data-testid="button-schedule-reminder" class="btn btn-primary">🔔 Schedule Reminder</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>All Reminders (Sorted by Time)</h3>
+                <div id="reminderList" class="list-container"></div>
+            </div>
+        </div>
+
+        <!-- Queue Section -->
+        <div id="queue" class="section">
+            <div class="section-header">
+                <h2>📋 Medicine Queue</h2>
+                <p class="section-desc">Manage and prioritize upcoming medicine reminders in the order they need attention for seamless health care.</p>
+            </div>
+
+            <button onclick="markTaken()" data-testid="button-mark-taken" class="btn btn-primary">✅ Mark Next as Taken</button>
+
+            <div class="card">
+                <h3>Queue</h3>
+                <div id="queueList" class="list-container"></div>
+            </div>
+        </div>
+
+        <!-- Undo Section -->
+        <div id="undo" class="section">
+            <div class="section-header">
+                <h2>↩️ Undo Manager</h2>
+                <p class="section-desc">Quickly revert recent actions to maintain accurate and up-to-date medicine records.</p>
+            </div>
+
+            <button onclick="undoAction()" data-testid="button-undo" class="btn btn-primary">↩️ Undo Last Action</button>
+
+            <div class="card">
+                <h3>📜 Action History</h3>
+                <div id="historyList" class="list-container"></div>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div id="help" class="section">
+            <div class="section-header">
+                <h2>❓ Help & Instructions</h2>
+                <p class="section-desc">Learn how to use MedLogix effectively for managing your medicines and reminders.</p>
+            </div>
+
+            <div class="help-grid">
+                <div class="help-card">
+                    <h3>📂 Category Manager</h3>
+                    <p>Categories help organize your medicines into logical groups like "Antibiotics", "Pain Relief", or "Vitamins".</p>
+                    <ul>
+                        <li>Add categories to group similar medicines</li>
+                        <li>Remove categories that are no longer needed</li>
+                        <li>Uses Array data structure for efficient access</li>
+                    </ul>
+                </div>
+
+                <div class="help-card">
+                    <h3>💊 Medicine Manager</h3>
+                    <p>Manage all your medicines with details like dosage, timing, and category.</p>
+                    <ul>
+                        <li>Add medicines with name, dose, timings, and category</li>
+                        <li>Search and filter medicines</li>
+                        <li>Uses Linked List for dynamic insertion</li>
+                    </ul>
+                </div>
+
+                <div class="help-card">
+                    <h3>📦 Stock Tracking</h3>
+                    <p>Monitor medicine stock levels and receive alerts when supplies run low.</p>
+                    <ul>
+                        <li>Update stock levels when purchasing</li>
+                        <li>Decrease stock when consuming</li>
+                        <li>Get low stock alerts automatically</li>
+                    </ul>
+                </div>
+
+                <div class="help-card">
+                    <h3>⏰ Reminder Scheduler</h3>
+                    <p>Schedule reminders for when to take your medicines.</p>
+                    <ul>
+                        <li>Schedule by selecting medicine and time</li>
+                        <li>View all reminders sorted by time</li>
+                        <li>Uses Binary Search Tree for organization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Floating Theme Button -->
+    <div class="theme-fab-container">
+        <div class="theme-menu" id="themeMenu">
+            <button class="theme-option" data-theme="light" data-testid="theme-light">
+                <span class="theme-option-icon">☀️</span>
+                <span class="theme-option-label">Light</span>
+            </button>
+            <button class="theme-option" data-theme="dark" data-testid="theme-dark">
+                <span class="theme-option-icon">🌙</span>
+                <span class="theme-option-label">Dark</span>
+            </button>
+            <button class="theme-option" data-theme="ocean" data-testid="theme-ocean">
+                <span class="theme-option-icon">🌊</span>
+                <span class="theme-option-label">Ocean</span>
+            </button>
+            <button class="theme-option" data-theme="sunset" data-testid="theme-sunset">
+                <span class="theme-option-icon">🌅</span>
+                <span class="theme-option-label">Sunset</span>
+            </button>
+            <button class="theme-option" data-theme="forest" data-testid="theme-forest">
+                <span class="theme-option-icon">🌲</span>
+                <span class="theme-option-label">Forest</span>
+            </button>
+            <button class="theme-option" data-theme="purple" data-testid="theme-purple">
+                <span class="theme-option-icon">💜</span>
+                <span class="theme-option-label">Purple</span>
+            </button>
+        </div>
+        <button class="theme-fab" id="themeFab" data-testid="button-theme-fab" aria-label="Change theme">
+            <span class="fab-icon">🎨</span>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

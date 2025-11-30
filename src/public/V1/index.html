@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MedLogix - Medicine Reminder System</title>
+    <link rel="icon" type="image/png" href="icon.png" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💊 MedLogix 💊</h1>
+            <p class="subtitle">Medicine Reminder System with Stock Tracking</p>
+        </header>
+
+        <div class="status-panel" id="statusPanel">
+            <h3>System Status</h3>
+            <div id="systemStatus">Loading...</div>
+        </div>
+
+        <nav class="main-menu">
+            <button onclick="showSection('categories')" class="menu-btn">📂 Categories</button>
+            <button onclick="showSection('medicines')" class="menu-btn">💊 Medicines</button>
+            <button onclick="showSection('stock')" class="menu-btn">📦 Stock</button>
+            <button onclick="showSection('reminders')" class="menu-btn">⏰ Reminders</button>
+            <button onclick="showSection('queue')" class="menu-btn">📋 Queue</button>
+            <button onclick="showSection('undo')" class="menu-btn">↩️ Undo/History</button>
+            <button onclick="showSection('help')" class="menu-btn">❓ Help</button>
+        </nav>
+
+        <div id="categories" class="section">
+            <h2>📂 Category Manager <!--(Array Data Structure)--></h2>
+            <p class="ds-desc">Organize and manage your medicine types efficiently for quick access and streamlined reminders.</p>
+            
+            <div class="form-group">
+                <input type="text" id="categoryName" placeholder="Enter category name" />
+                <button onclick="addCategory()">Add Category</button>
+                <button onclick="removeCategory()">Remove Category</button>
+            </div>
+            <div id="categoryList" class="result-box"></div>
+        </div>
+
+        <div id="medicines" class="section" style="display:none;">
+            <!-- Medicines section left unchanged with medicineName as textbox -->
+            <h2>💊 Medicine Manager <!--(Linked List Data Structure) Uses singly linked list for dynamic O(1) insertion and O(n) search--></h2>
+            <p class="ds-desc">Effortlessly manage your medicines, dosages, and schedules for timely and accurate reminders.</p>
+            
+            <div class="form-group">
+                <input type="text" id="medicineName" placeholder="Medicine name" />
+                <input type="text" id="medicineDose" placeholder="Dose (e.g., 500mg)" />
+                <input type="text" id="medicineTimings" placeholder="Timings (e.g., Morning, Evening)" />
+                <select id="medicineCategory"></select>
+                <button onclick="addMedicine()">Add Medicine</button>
+            </div>
+            
+            <div class="form-group">
+                <input type="text" id="searchName" placeholder="Search medicine name" />
+                <button onclick="searchMedicine()">Search</button>
+                <button onclick="deleteMedicine()">Delete</button>
+                <button onclick="listAllMedicines()">List All</button>
+            </div>
+            
+            <div class="form-group">
+                <select id="filterCategory"></select>
+                <button onclick="filterByCategory()">Filter by Category</button>
+            </div>
+
+            <div id="medicineList" class="result-box"></div>
+        </div>
+
+        <div id="stock" class="section" style="display:none;">
+            <h2>📦 Stock Tracking <!--(Linked List Extension)--></h2>
+            <p class="ds-desc">Monitor medicine quantities in real-time and get alerts to never run out of essential medications.</p>
+            
+        <!--   <div class="form-group">
+                <h4>Add Medicine with Stock</h4>
+                <select id="stockMedicineNameDropdown">
+                    <option value="">Select Medicine</option>
+                </select>
+                <input type="text" id="stockMedicineDose" placeholder="Dose" />
+                <input type="text" id="stockMedicineTimings" placeholder="Timings" />
+                <select id="stockMedicineCategory"></select>
+                <input type="number" id="stockQuantity" placeholder="Stock quantity" min="0" />
+                <input type="number" id="stockThreshold" placeholder="Low stock threshold" min="1" value="5" />
+                <button onclick="addMedicineWithStock()">Add Medicine with Stock</button>
+            </div> -->
+
+            <div class="form-group">
+                <h4>Update Stock</h4>
+                <select id="updateStockNameDropdown">
+                    <option value="">Select Medicine</option>
+                </select>
+                <input type="number" id="updateStockQuantity" placeholder="New quantity" min="0" />
+                <button onclick="updateStockLevel()">Update Stock</button>
+            </div>
+
+            <div class="form-group">
+                <h4>Decrease Stock (Manual)</h4>
+                <select id="decreaseStockNameDropdown">
+                    <option value="">Select Medicine</option>
+                </select>
+                <input type="number" id="decreaseStockQuantity" placeholder="Decrease by" min="1" value="1" />
+                <button onclick="decreaseStockLevel()">Decrease Stock</button>
+            </div>
+
+            <div class="form-group">
+                <button onclick="viewStockLevels()">View All Stock Levels</button>
+                <button onclick="viewLowStockAlerts()">View Low Stock Alerts</button>
+            </div>
+
+            <div id="stockList" class="result-box"></div>
+        </div>
+
+        <div id="reminders" class="section" style="display:none;">
+            <h2>⏰ Reminder Scheduler <!--(Binary Search Tree)--></h2>
+            <p class="ds-desc">Schedule and organize medicine reminders efficiently to ensure timely intake and health management.</p>
+            
+            <div class="form-group">
+                <select id="reminderMedicineDropdown">
+                    <option value="">Select Medicine</option>
+                </select>
+                <input type="time" id="reminderTime" />
+                <button onclick="scheduleReminder()">Schedule Reminder</button>
+            </div>
+
+            <div class="form-group">
+                <button onclick="viewReminders()">View All (In-Order)</button>
+                <button onclick="getNextReminder()">Get Next Reminder</button>
+            </div>
+
+            <div class="form-group">
+                <select id="deleteReminderMedicineDropdown">
+                    <option value="">Select Medicine</option>
+                </select>
+                <input type="time" id="deleteReminderTime" />
+                <button onclick="deleteReminder()">Delete Reminder</button>
+            </div>
+
+            <div id="reminderList" class="result-box"></div>
+        </div>
+
+        <div id="queue" class="section" style="display:none;">
+            <h2>📋 Reminder Queue <!--(Queue Data Structure - FIFO)--></h2>
+            <p class="ds-desc">Manage and prioritize upcoming medicine reminders in the order they need attention for seamless health care.</p>
+            
+            <div class="form-group">
+                <button onclick="viewQueue()">View Queue</button>
+                <button onclick="markTaken()">Mark Next as Taken (Dequeue)</button>
+            </div>
+
+            <div id="queueList" class="result-box"></div>
+        </div>
+
+        <div id="undo" class="section" style="display:none;">
+            <h2>↩️ Undo Manager <!--(Stack Data Structure - LIFO)--></h2>
+            <p class="ds-desc">Quickly revert recent actions to maintain accurate and up-to-date medicine records.</p>
+            
+            <div class="form-group">
+                <button onclick="undoAction()">Undo Last Action</button>
+                <button onclick="viewHistory()">View Action History</button>
+            </div>
+
+            <div id="historyList" class="result-box"></div>
+        </div>
+
+        <div id="help" class="section" style="display:none;">
+            <h2>❓ Help & Instructions</h2>
+            
+            <div class="help-content">
+                <!-- Your existing help content -->
+            </div>
+        </div>
+
+        <div id="output" class="output-box"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

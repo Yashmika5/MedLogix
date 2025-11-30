@@ -1,0 +1,38 @@
+Build a gui-based Medicine Reminder System in C++. The application must clearly demonstrate the use of core data structures and algorithms, with all classes and major functions heavily commented. At the start of every major function and data structure, provide a descriptive comment on its purpose and the algorithmic logic used.
+Application Structure and Key Interfaces
+Main Menu
+Central text-based navigation to all features (categories, medicines, reminders, undo, history, help).
+Displays status summaries (number of medicines, next reminder, etc.)
+// Main Menu: Controls program navigation and output summaries.
+Category Manager (Array)
+Stores fixed medicine categories (e.g., Antibiotics, Painkillers, Vitamins) using an array.
+Functions to add, remove, list categories.
+// Array: Fixed-size array holds all medicine category names.
+Medicine Manager (Linked List)
+For each category, maintains a dynamic singly or doubly linked list of medicines, with attributes (name, dose, timings).
+Functions to add/delete/search medicines in each list.
+// Linked List: Dynamic management of medicines per category – add, remove, search.
+Reminder Scheduler (Binary Tree)
+Each medicine reminder (unique intake time) is a node in a binary search tree, enabling fast sorting and search of the next scheduled dose.
+Use in-order traversal to display reminders in time order.
+// Binary Tree: Organizes reminders for quick search and chronological order.
+Reminders Queue (Queue)
+Queue data structure manages all reminders in scheduled order (FIFO).
+Enqueue for new reminders; dequeue as medicines are confirmed taken.
+// Queue: First-in-first-out management of due reminders.
+Undo Actions (Stack)
+Stack records recent actions (add, edit, delete). Pop to revert last change.
+// Stack: LIFO undo support for all main actions.
+Action History
+Displays a list of recent user operations, working with the stack for undo.
+// Action History: Prints last N user actions for transparency.
+Help/Instructions Menu
+Static section explaining how to use all features.
+// Help Menu: User instructions.
+Data Structures and Algorithms Description
+Array: Statically stores category names, supports indexing and iteration.
+Linked List: Medicines for each category, enables dynamic insertions and deletions with pointer-based navigation.
+Binary Tree: Medicine reminders scheduled by time, for O(log n) insertion/search and sorted print (using in-order traversal).
+Queue: Holds reminders, processed in strict time order (first entered, first out).
+Stack: Tracks each change for undo operations.
+Each data structure should be a separate class where applicable, with public methods for all operations, each beginning with a full comment block describing both the data structure and the algorithm/logic it implements.
